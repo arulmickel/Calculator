@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">DFCalculator</string>
+    <string name="display_default">0</string>
+    <string name="error_div_zero">Cannot divide by zero</string>
+    <string name="deg">DEG</string>
+    <string name="rad">RAD</string>
+</resources>
