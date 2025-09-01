@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- I kept single menu item for theme change -->
+    <item
+        android:id="@+id/action_theme"
+        android:title="@string/theme_dark"
+        android:icon="@drawable/ic_dark_mode_24"
+        app:showAsAction="always"
+        app:iconTint="?attr/colorOnSurface" />
+</menu>

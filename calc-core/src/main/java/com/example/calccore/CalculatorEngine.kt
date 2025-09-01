@@ -1,13 +1,23 @@
 package com.example.calccore
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize   // used to save/restore state
 import kotlin.math.*
 
+//operations/functions/angle modes
 enum class Operator { ADD, SUB, MUL, DIV }
 enum class TrigFunction { SIN, COS, TAN }
 enum class AngleMode { DEG, RAD }
 
+/**
+ * CalculatorEngine = arithmetic logic written as an Android library framework.
+ * remembers what's typed and computes.
+ * It holds temporary numbers, the pending operator, and last result.
+ * Division by zero throws ArithmeticException.
+ */
 class CalculatorEngine(var angleMode: AngleMode = AngleMode.DEG) {
 
+    // assigned internal memory
     private var input: String = ""
     private var storedValue: Double? = null
     private var pendingOp: Operator? = null
@@ -38,21 +48,26 @@ class CalculatorEngine(var angleMode: AngleMode = AngleMode.DEG) {
         afterEquals = false
     }
 
-    fun deleteLast() { if (input.isNotEmpty()) input = input.dropLast(1) }
+    fun deleteLast() {
+        if (input.isNotEmpty()) input = input.dropLast(1)
+    }
 
     fun toggleSign() {
-        input = if (input.startsWith("-")) input.drop(1) else if (input.isNotEmpty()) "-$input" else input
+        input = if (input.startsWith("-")) input.drop(1)
+        else if (input.isNotEmpty()) "-$input" else input
     }
 
     fun inputDigit(c: Char) {
         if (!c.isDigit()) return
-        if (afterEquals) allClear()
-        if (input == "0") input = c.toString() else input += c
+        if (afterEquals) { allClear() }
+        input = if (input == "0") c.toString() else input + c
     }
 
     fun inputDot() {
         if (afterEquals) allClear()
-        if (!input.contains(".")) input = if (input.isEmpty()) "0." else "$input."
+        if (!input.contains(".")) {
+            input = if (input.isEmpty()) "0." else "$input."
+        }
     }
 
     fun setOperator(op: Operator) {
@@ -121,7 +136,39 @@ class CalculatorEngine(var angleMode: AngleMode = AngleMode.DEG) {
     }
 
     private fun trimDouble(d: Double): String {
-        val s = "%,.10f".format(d).replace(",", "")
+        val s = "%,.10f".format(d).trim().replace(",", "")
         return s.trimEnd('0').trimEnd('.')
+    }
+
+    // - Snapshot | so we can save/restore(for process "OnDeath" state / config change) -
+
+    @Parcelize
+    data class EngineState(
+        val input: String,
+        val storedValue: Double?,
+        val pendingOp: Operator?,
+        val lastResult: Double?,
+        val afterEquals: Boolean,
+        val angleMode: AngleMode
+    ) : Parcelable
+
+    // Capture current state for saving into Bundle
+    fun snapshot(): EngineState = EngineState(
+        input = input,
+        storedValue = storedValue,
+        pendingOp = pendingOp,
+        lastResult = lastResult,
+        afterEquals = afterEquals,
+        angleMode = angleMode
+    )
+
+    // Restore previously saved state (safe to call with any snapshot)
+    fun restore(s: EngineState) {
+        input = s.input
+        storedValue = s.storedValue
+        pendingOp = s.pendingOp
+        lastResult = s.lastResult
+        afterEquals = s.afterEquals
+        angleMode = s.angleMode
     }
 }

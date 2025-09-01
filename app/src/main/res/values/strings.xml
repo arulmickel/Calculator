@@ -1,7 +1,10 @@
 <resources>
     <string name="app_name">DFCalculator</string>
     <string name="display_default">0</string>
-    <string name="error_div_zero">Cannot divide by zero</string>
+    <string name="error_div_zero">Cannot divide by zero</string>  <!-- (1/0)Friendly error -->
     <string name="deg">DEG</string>
     <string name="rad">RAD</string>
+    <string name="theme_dark">Dark mode</string>
+    <string name="theme_light">Light mode</string>
 </resources>
+

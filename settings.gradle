@@ -13,4 +13,4 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "DFCalculator"
-include(":app", ":calc-core")
+include(":app", ":calc-core") // kept in separate two modules as requirement

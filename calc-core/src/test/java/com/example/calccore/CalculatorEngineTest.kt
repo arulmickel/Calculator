@@ -3,6 +3,11 @@ package com.example.calccore
 import org.junit.Assert.*
 import org.junit.Test
 
+/**
+ * Kept tiny tests that prove the brain does basic math and handles errors.
+ * Run: Right-click the calc-core module -> Run Tests
+ */
+
 class CalculatorEngineTest {
 
     @Test

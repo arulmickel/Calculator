@@ -5,6 +5,18 @@
     android:layout_height="match_parent"
     android:padding="12dp">
 
+    <!-- theme menu for toolbar -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        style="?attr/toolbarStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:title="@string/app_name"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- used linear layout for expression + result which this is enough -->
     <LinearLayout
         android:id="@+id/displayContainer"
         android:orientation="vertical"
@@ -33,6 +45,7 @@
             android:text="@string/display_default" />
     </LinearLayout>
 
+    <!-- used "androidx.gridlayout.widget.GridLayout" for keypads which is flexible layouts(portrait/landscape) -->
     <androidx.gridlayout.widget.GridLayout
         android:id="@+id/grid"
         android:layout_width="0dp"

@@ -2,6 +2,7 @@
     <application
         android:allowBackup="true"
         android:label="@string/app_name"
+        android:icon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/Theme.DFCalculator">
         <activity android:name=".MainActivity" android:exported="true">

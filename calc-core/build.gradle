@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.library' version '8.12.2'
     id 'org.jetbrains.kotlin.android' version '1.9.24'
+    id 'org.jetbrains.kotlin.plugin.parcelize' version '1.9.24'
 }
 
 android {
@@ -21,6 +22,6 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.annotation:annotation:1.7.1'
+    implementation 'androidx.annotation:annotation:1.7.1'  // kept as an Optional(nullability/annotations)
     testImplementation 'junit:junit:4.13.2'
 }
