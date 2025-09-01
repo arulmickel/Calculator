@@ -44,13 +44,14 @@ Core math lives in a separate **library module** (`calc-core`) so logic is testa
 
 ## Architecture Overview
 DFCalculator/
-├─ app/ # Android app (UI)
-│ ├─ MainActivity.kt # Wires buttons ↔ engine; toolbar + theme toggle
-│ ├─ MainViewModel.kt # Holds CalculatorEngine across rotation
-│ ├─ ThemePrefs.kt # Saves Dark/Light and applies AppCompatDelegate
-│ └─ res/ # Layouts (portrait/land), menu, strings, theme
-└─ calc-core/ # Android Library (no UI)
-└─ CalculatorEngine.kt # Pure logic + snapshot/restore (Parcelable)
+├─ app/                         # Android app (UI)
+│  ├─ MainActivity.kt           # Wires buttons ↔ engine; toolbar + theme toggle
+│  ├─ MainViewModel.kt          # Holds CalculatorEngine across rotation
+│  ├─ ThemePrefs.kt             # Saves Dark/Light; applies AppCompatDelegate
+│  └─ res/                      # Layouts (portrait/land), menu, strings, theme
+└─ calc-core/                   # Android Library (no UI)
+   └─ CalculatorEngine.kt       # Pure logic + snapshot/restore (Parcelable)
+
 
 ------------------------------------------
 
@@ -86,12 +87,13 @@ DFCalculator/
 ## Tests
 
 ## Run Junit tests (library module):
+```bash
 ./gradlew :calc-core:test
 Covers:
 12 + 3 = 15
 Divide by zero throws ArithmeticException
 sin(90°) ≈ 1 (degree mode)
-```bash
+
 
 
 
