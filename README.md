@@ -23,7 +23,7 @@ Core math lives in a separate **library module** (`calc-core`) so logic is testa
 - **Dark/Light mode** switch (persists across launches)  
 - Shows **expression** and **result** distinctly  
 - Optimized **portrait** & **landscape** layouts  
-- **Division-by-zero** handled gracefully
+- **Division-by-zero** handled 
 
 ---
 
@@ -44,17 +44,15 @@ Core math lives in a separate **library module** (`calc-core`) so logic is testa
 
 ## Architecture Overview
 DFCalculator/
-├─ app/                         # Android app (UI)
-│  ├─ MainActivity.kt           # Wires buttons ↔ engine; toolbar + theme toggle
-│  ├─ MainViewModel.kt          # Holds CalculatorEngine across rotation
-│  ├─ ThemePrefs.kt             # Saves Dark/Light; applies AppCompatDelegate
-│  └─ res/                      # Layouts (portrait/land), menu, strings, theme
-└─ calc-core/                   # Android Library (no UI)
-   └─ CalculatorEngine.kt       # Pure logic + snapshot/restore (Parcelable)
-
+├─ app/                        
+│  ├─ MainActivity.kt           
+│  ├─ MainViewModel.kt          
+│  ├─ ThemePrefs.kt             
+│  └─ res/                     
+└─ calc-core/                  
+   └─ CalculatorEngine.kt       
 
 ------------------------------------------
-
 
 **Patterns used**
 - *Separation of concerns:* UI vs. logic (library).
@@ -86,14 +84,10 @@ DFCalculator/
 
 ## Tests
 
-## Run Junit tests (library module):
+Run unit tests (library module):
+
 ```bash
 ./gradlew :calc-core:test
-Covers:
-12 + 3 = 15
-Divide by zero throws ArithmeticException
-sin(90°) ≈ 1 (degree mode)
-
 
 
 
