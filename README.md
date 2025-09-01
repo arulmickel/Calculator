@@ -1,11 +1,11 @@
-# Calculator — History Feature
+# Calculator | History Feature
 
 This branch isolates the **History** feature of DFCalculator.  
 It demonstrates how calculation results can be recorded and viewed from a persistent store, separate from the main calculator app.
 
 ---
 
-## ✨ Feature Overview
+## Feature Overview
 - **History Button** in the toolbar
 - **Persistent storage** using SharedPreferences (lightweight JSON)
 - **Dialog UI** listing last 50 calculations (`expression = result`)
