@@ -1,6 +1,6 @@
-# Calculator | History Feature
+# Optional enhancement | History Feature
 
-This branch isolates the **History** feature of DFCalculator.  
+This branch isolates only **History** feature of DFCalculator just an experimental and attached screenshots below.
 It demonstrates how calculation results can be recorded and viewed from a persistent store, separate from the main calculator app.
 
 ---
