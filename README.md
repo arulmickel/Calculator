@@ -82,13 +82,6 @@ DFCalculator/
 
 ---
 
-## Tests
-
-Run unit tests (library module):
-
-```bash
-./gradlew :calc-core:test
-
 ## Screenshots
 
 <p align="center">
@@ -104,5 +97,10 @@ Run unit tests (library module):
   <img src="screenshots/portrait_dark.png"  alt="Portrait – Dark"  width="260" />
 </p>
 
+## Tests
 
+Run unit tests (library module):
+
+```bash
+./gradlew :calc-core:test
 
