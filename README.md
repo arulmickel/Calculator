@@ -1,11 +1,11 @@
-# DFCalculator — Android Challenge
+# Calculator | Android Challenge
 
 A clean Android calculator with **Add / Subtract / Multiply / Divide / Sin / Cos / Tan**, a **Dark/Light mode toggle**, and **state that survives rotation & process death**.  
 Core math lives in a separate **library module** (`calc-core`) so logic is testable and reusable.
 
 ---
 
-## TL;DR for Reviewers
+## Executive Summary
 
 - **Kotlin + Android SDK** with **Material** look & **ViewBinding**.
 - **Architecture:** UI (app) ↔ **CalculatorEngine** (library), state held in **ViewModel**.
