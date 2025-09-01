@@ -89,5 +89,20 @@ Run unit tests (library module):
 ```bash
 ./gradlew :calc-core:test
 
+## Screenshots
+
+<p align="center">
+  <img src="docs/screenshots/app.png" alt="App overview" width="300" />
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/demo.png" alt="Demo" width="360" />
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/portrait_light.png" alt="Portrait – Light" width="260" />
+  <img src="docs/screenshots/portrait_dark.png"  alt="Portrait – Dark"  width="260" />
+</p>
+
 
 
