@@ -6,5 +6,10 @@
     <string name="rad">RAD</string>
     <string name="theme_dark">Dark mode</string>
     <string name="theme_light">Light mode</string>
+    <string name="history">History</string>
+    <string name="history_clear">Clear history</string>
+    <string name="history_empty">No history yet</string>
+    <string name="copied">Copied</string>
 </resources>
 
+    git remote -v

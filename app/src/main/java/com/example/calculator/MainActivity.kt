@@ -1,19 +1,23 @@
 package com.example.calculator
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
 import android.widget.Button
 import android.widget.Toast
-import androidx.activity.viewModels   // created this to keep the results even screen changes to landscape or portrait
+import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.calculator.databinding.ActivityMainBinding
+import com.example.calculator.history.HistoryItem
+import com.example.calculator.history.HistoryStore
 import com.example.calccore.AngleMode
+import com.example.calccore.CalculatorEngine.EngineState
 import com.example.calccore.Operator
 import com.example.calccore.TrigFunction
-import com.example.calccore.CalculatorEngine.EngineState   // using this one for restoring state(Snapshot)
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,7 +25,7 @@ class MainActivity : AppCompatActivity() {
     private val vm: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
+        // Apply saved theme BEFORE inflating views (prevents flicker)
         AppCompatDelegate.setDefaultNightMode(
             if (ThemePrefs.isDark(this)) AppCompatDelegate.MODE_NIGHT_YES
             else AppCompatDelegate.MODE_NIGHT_NO
@@ -35,27 +39,26 @@ class MainActivity : AppCompatActivity() {
         binding.toolbar.inflateMenu(R.menu.menu_main)
 
         // Set initial title & icon based on saved mode
-        val themeItem = binding.toolbar.menu.findItem(R.id.action_theme)
-        val isDarkNow = ThemePrefs.isDark(this)
-        themeItem.title = if (isDarkNow) getString(R.string.theme_light) else getString(R.string.theme_dark)
-        themeItem.setIcon(if (isDarkNow) R.drawable.ic_light_mode_24 else R.drawable.ic_dark_mode_24)
+        binding.toolbar.menu.findItem(R.id.action_theme)?.title =
+            if (ThemePrefs.isDark(this)) getString(R.string.theme_light) else getString(R.string.theme_dark)
 
         // Handle clicks(which switch theme)
         binding.toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
+                R.id.action_history -> {
+                    showHistoryDialog()
+                    true
+                }
                 R.id.action_theme -> {
                     val newDark = !ThemePrefs.isDark(this)
-                    ThemePrefs.setDark(this, newDark) // triggers theme change
-
-                    // Updating menu icon
+                    ThemePrefs.setDark(this, newDark) // triggers Activity recreate
+                    // Update the title immediately for feedback
                     item.title = if (newDark) getString(R.string.theme_light) else getString(R.string.theme_dark)
-                    item.setIcon(if (newDark) R.drawable.ic_light_mode_24 else R.drawable.ic_dark_mode_24)
                     true
                 }
                 else -> false
             }
         }
-
 
         // - Restore engine snapshot if present (handles process "OnDeath" state too) -
         savedInstanceState?.let { bundle ->
@@ -74,8 +77,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         // assigning numbers to these buttons
-        listOf(binding.btn0, binding.btn1, binding.btn2, binding.btn3, binding.btn4,
-            binding.btn5, binding.btn6, binding.btn7, binding.btn8, binding.btn9).forEach { btn ->
+        listOf(
+            binding.btn0, binding.btn1, binding.btn2, binding.btn3, binding.btn4,
+            binding.btn5, binding.btn6, binding.btn7, binding.btn8, binding.btn9
+        ).forEach { btn ->
             btn.setOnClickListener {
                 vm.engine.inputDigit((it as Button).text.first())
                 updateDisplay()
@@ -92,8 +97,15 @@ class MainActivity : AppCompatActivity() {
 
         // this is the one which equals with divide-by-zero safety block
         binding.btnEq.setOnClickListener {
+            // Capture the expression BEFORE equals (engine may clear input/replace state)
+            val expr = vm.engine.expression.ifBlank { binding.tvExpression.text.toString() }
             try {
-                vm.engine.equalsPress(); updateDisplay()
+                vm.engine.equalsPress()
+                updateDisplay()
+                val res = vm.engine.displayValue
+                if (expr.isNotBlank()) {
+                    HistoryStore.add(this, HistoryItem(expression = expr, result = res))
+                }
             } catch (e: ArithmeticException) {
                 Toast.makeText(this, getString(R.string.error_div_zero), Toast.LENGTH_SHORT).show()
             }
@@ -111,34 +123,46 @@ class MainActivity : AppCompatActivity() {
 
         // angle unit(toggle option)
         binding.btnMode.setOnClickListener {
-            vm.engine.angleMode = if (vm.engine.angleMode == AngleMode.DEG) AngleMode.RAD else AngleMode.DEG
-            binding.btnMode.text = if (vm.engine.angleMode == AngleMode.DEG) getString(R.string.deg) else getString(R.string.rad)
+            vm.engine.angleMode =
+                if (vm.engine.angleMode == AngleMode.DEG) AngleMode.RAD else AngleMode.DEG
+            binding.btnMode.text =
+                if (vm.engine.angleMode == AngleMode.DEG) getString(R.string.deg) else getString(R.string.rad)
             updateDisplay()
         }
 
         updateDisplay()
     }
 
-    // - tried toolbar menu to keep dark/light modes -
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_main, menu)
-        // Set the initial title based on current mode
-        menu.findItem(R.id.action_theme)?.title =
-            if (ThemePrefs.isDark(this)) getString(R.string.theme_light) else getString(R.string.theme_dark)
-        return true
+    // - History UI helpers (class members) -
+    private fun showHistoryDialog() {
+        val items = HistoryStore.get(this)
+        if (items.isEmpty()) {
+            AlertDialog.Builder(this)
+                .setTitle(getString(R.string.history))
+                .setMessage(getString(R.string.history_empty))
+                .setPositiveButton(android.R.string.ok, null)
+                .show()
+            return
+        }
+
+        val display = items.map { "${it.expression} = ${it.result}" }.toTypedArray()
+        AlertDialog.Builder(this)
+            .setTitle(getString(R.string.history))
+            .setItems(display) { _, which ->
+                val chosen = items[which]
+                copyToClipboard(chosen.result)
+                Toast.makeText(this, getString(R.string.copied), Toast.LENGTH_SHORT).show()
+            }
+            .setNegativeButton(getString(R.string.history_clear)) { _, _ ->
+                HistoryStore.clear(this)
+            }
+            .setPositiveButton(android.R.string.cancel, null)
+            .show()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_theme -> {
-                val newDark = !ThemePrefs.isDark(this)
-                ThemePrefs.setDark(this, newDark)
-                // Title will be refreshed after recreate; update now for UX
-                item.title = if (newDark) getString(R.string.theme_light) else getString(R.string.theme_dark)
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
+    private fun copyToClipboard(text: String) {
+        val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        cm.setPrimaryClip(ClipData.newPlainText("result", text))
     }
 
     //- Save engine snapshot so state persists across process "OnDeath" state while switch over other apps -
