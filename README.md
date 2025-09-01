@@ -85,11 +85,8 @@ DFCalculator/
 ## Screenshots
 
 <p align="center">
-  <img src="screenshots/app.png" alt="App overview" width="300" />
-</p>
-
-<p align="center">
-  <img src="screenshots/demo.png" alt="Demo" width="360" />
+  <img src="screenshots/app.png" alt="App" width="260" />
+  <img src="screenshots/demo.png" alt="Demo"  width="260" />
 </p>
 
 <p align="center">
