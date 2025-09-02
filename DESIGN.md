@@ -1,4 +1,4 @@
-# DESIGN.md — DFCalculator
+# DESIGN.md | DFCalculator
 
 ## Executive Summary
 DFCalculator is a small, testable Android calculator built as two modules:
