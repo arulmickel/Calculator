@@ -21,43 +21,6 @@ The architecture separates **presentation** from **logic**, uses a **ViewModel**
 - Multi-lang/i18n beyond basic strings
 - Database storage (Room) in the base solution
 
----
-
-## Module & Directory Layout
-DFCalculator/
-├─ app/ # Android app (UI)
-│ ├─ src/
-│ │ └─ main/
-│ │ ├─ java/com/example/calculator/
-│ │ │ ├─ MainActivity.kt # Wires UI ↔ engine; toolbar (theme, history*)
-│ │ │ ├─ MainViewModel.kt # Holds CalculatorEngine across rotation
-│ │ │ ├─ ThemePrefs.kt # Persist/apply Dark/Light mode
-│ │ │ └─ history/ # * present only in feature/history-dialog
-│ │ │ └─ HistoryStore.kt # SharedPreferences JSON history
-│ │ └─ res/
-│ │ ├─ layout/ # activity_main.xml (+ layout-land/)
-│ │ ├─ menu/ # menu_main.xml (History*, Theme)
-│ │ └─ values/ # strings.xml, themes.xml, colors.xml
-│ └─ build.gradle
-├─ calc-core/ # Android Library (logic only)
-│ ├─ src/
-│ │ └─ main/java/com/example/calccore/
-│ │ └─ CalculatorEngine.kt # Core math + EngineState (Parcelable)
-│ └─ build.gradle
-├─ docs/
-│ └─ screenshots/ # README/feature images
-│ └─ nf-screenshots.png # example asset (feature branch)
-├─ README.md
-├─ DESIGN.md
-├─ settings.gradle
-├─ gradle/ # Gradle wrapper files
-└─ gradlew / gradlew.bat
-
-
-*`history/` and its usage appear only in the **feature/history-dialog** branch.*
-::contentReference[oaicite:0]{index=0}
-
-
 **Build**
 - Kotlin (JDK 17), AGP 8.5, AndroidX
 - `minSdk=24`, `target/compileSdk=34`
@@ -213,6 +176,42 @@ DFCalculator/
 - **`feature/history-dialog`** — Optional enhancement (persistent History via SharedPreferences with a simple dialog UI)
 
 > The tagged commit `challenge-submission-YYYY-MM-DD` denotes the exact submission for review.
+
+## Module & Directory Layout
+
+*`history/` and its usage appear only in the **feature/history-dialog** branch.*
+::contentReference[oaicite:0]{index=0}
+
+
+```text
+DFCalculator/
+├─ app/                                  # Android app (UI)
+│  ├─ src/
+│  │  └─ main/
+│  │     ├─ java/com/example/calculator/
+│  │     │  ├─ MainActivity.kt           # Wires UI ↔ engine; toolbar (theme, history*)
+│  │     │  ├─ MainViewModel.kt          # Holds CalculatorEngine across rotation
+│  │     │  ├─ ThemePrefs.kt             # Persist/apply Dark/Light mode
+│  │     │  └─ history/                  # * present only in feature/history-dialog
+│  │     │     └─ HistoryStore.kt        # SharedPreferences JSON history
+│  │     └─ res/
+│  │        ├─ layout/                   # activity_main.xml (+ layout-land/)
+│  │        ├─ menu/                     # menu_main.xml (History*, Theme)
+│  │        └─ values/                   # strings.xml, themes.xml, colors.xml
+│  └─ build.gradle
+├─ calc-core/                            # Android Library (logic only)
+│  ├─ src/
+│  │  └─ main/java/com/example/calccore/
+│  │     └─ CalculatorEngine.kt          # Core math + EngineState (Parcelable)
+│  └─ build.gradle
+├─ docs/
+│  └─ screenshots/                       # README/feature images
+│     └─ nf-screenshots.png              # example asset (feature branch)
+├─ README.md
+├─ DESIGN.md
+├─ settings.gradle
+├─ gradle/                               # Gradle wrapper files
+└─ gradlew / gradlew.bat
 
 ---
 
