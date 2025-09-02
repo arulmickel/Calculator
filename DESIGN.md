@@ -26,16 +26,36 @@ The architecture separates **presentation** from **logic**, uses a **ViewModel**
 ## Module & Directory Layout
 DFCalculator/
 ├─ app/ # Android app (UI)
-│ ├─ src/main/java/com/example/calculator/
-│ │ ├─ MainActivity.kt 
-│ │ ├─ MainViewModel.kt 
-│ │ ├─ ThemePrefs.kt 
-│ │ └─ history/ 
-│ │ └─ HistoryStore.kt 
-│ └─ src/main/res/ 
-└─ calc-core/ # Android Library (logic only)
-   └─ src/main/java/com/example/calccore/
-   └─ CalculatorEngine.kt 
+│ ├─ src/
+│ │ └─ main/
+│ │ ├─ java/com/example/calculator/
+│ │ │ ├─ MainActivity.kt # Wires UI ↔ engine; toolbar (theme, history*)
+│ │ │ ├─ MainViewModel.kt # Holds CalculatorEngine across rotation
+│ │ │ ├─ ThemePrefs.kt # Persist/apply Dark/Light mode
+│ │ │ └─ history/ # * present only in feature/history-dialog
+│ │ │ └─ HistoryStore.kt # SharedPreferences JSON history
+│ │ └─ res/
+│ │ ├─ layout/ # activity_main.xml (+ layout-land/)
+│ │ ├─ menu/ # menu_main.xml (History*, Theme)
+│ │ └─ values/ # strings.xml, themes.xml, colors.xml
+│ └─ build.gradle
+├─ calc-core/ # Android Library (logic only)
+│ ├─ src/
+│ │ └─ main/java/com/example/calccore/
+│ │ └─ CalculatorEngine.kt # Core math + EngineState (Parcelable)
+│ └─ build.gradle
+├─ docs/
+│ └─ screenshots/ # README/feature images
+│ └─ nf-screenshots.png # example asset (feature branch)
+├─ README.md
+├─ DESIGN.md
+├─ settings.gradle
+├─ gradle/ # Gradle wrapper files
+└─ gradlew / gradlew.bat
+
+
+*`history/` and its usage appear only in the **feature/history-dialog** branch.*
+::contentReference[oaicite:0]{index=0}
 
 
 **Build**
