@@ -52,6 +52,8 @@ DFCalculator/
 └─ calc-core/                  
    └─ CalculatorEngine.kt       
 
+> For architecture details and design decisions, see **[DESIGN.md](DESIGN.md)**.
+
 ------------------------------------------
 
 **Patterns used**
